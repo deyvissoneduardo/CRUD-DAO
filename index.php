@@ -1,9 +1,9 @@
 <?php
 
-require_once("config.php");
+require_once("./config.php");
 
-$sql = new Sql();
+$user = new Usuario();
 
-$usuario = $sql->select("SELECT * FROM usuario");
+$user->loadById(2);
 
-echo $sql;
+echo $user;
