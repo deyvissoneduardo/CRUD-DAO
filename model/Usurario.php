@@ -115,6 +115,59 @@ class Usuario{
         }
     }
 
+    /*
+    * Lista todo usuarios da tabale
+    */
+    public static function getList(){
+
+        $sql = new Sql(); // conexao com banco
+        
+        // executa query
+        return $sql->select("SELECT * FROM usuario");
+
+    }
+
+    /*
+    * busca por LIKE
+    */ 
+    public static function search($login){
+
+        $sql = new Sql(); // conexao com banco
+
+        return $sql->select("SELECT * FROM usuario WHERE login :SEARCH", array(
+            ':SEARCH' => "%.$login.%"
+        ));
+    }
+
+
+    /*
+    * Atutentica usurio 
+    */ 
+    public function login($login, $passoword){
+
+        $sql = new Sql(); // conexao com banco
+
+
+        // executa query
+        $result = $sql->select("SELECT * FROM usuario WHERE login = :LOGIN AND senha - :PASSWORD", array(
+            ":LOGIN" => $login,
+            ":PASSWORD" => $passoword
+        ));
+        
+         if(count($result) > 0){
+            $row = $result[0];
+            
+            $this->setId($row['id']);     
+            $this->setLogin($row['login']);
+            $this->setSenha($row['senha']);
+            $this->setDtCadastro(new DateTime($row['dtCadastro']));
+
+        }else {
+            throw new Exception("Login/Senha invalido", 1);
+            
+        }
+
+    }
     public function __toString(){
         
         return json_encode(array(
