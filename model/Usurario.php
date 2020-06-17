@@ -104,14 +104,8 @@ class Usuario{
         
         //valida id carregado
         if(count($result) > 0){
-            $row = $result[0];
-            
             //caso id valido carrega dados
-            $this->setId($row['id']);     
-            $this->setLogin($row['login']);
-            $this->setSenha($row['senha']);
-            $this->setDtCadastro(new DateTime($row['dtCadastro']));
-
+            $this->setData($result[0]);
         }
     }
 
@@ -147,7 +141,6 @@ class Usuario{
 
         $sql = new Sql(); // conexao com banco
 
-
         // executa query
         $result = $sql->select("SELECT * FROM usuario WHERE login = :LOGIN AND senha - :PASSWORD", array(
             ":LOGIN" => $login,
@@ -155,19 +148,48 @@ class Usuario{
         ));
         
          if(count($result) > 0){
-            $row = $result[0];
-            
-            $this->setId($row['id']);     
-            $this->setLogin($row['login']);
-            $this->setSenha($row['senha']);
-            $this->setDtCadastro(new DateTime($row['dtCadastro']));
-
+            $this->setData($result[0]);
         }else {
             throw new Exception("Login/Senha invalido", 1);
             
         }
 
     }
+    public function setData($data){
+        $this->setId($data['id']);     
+        $this->setLogin($data['login']);
+        $this->setSenha($data['senha']);
+        $this->setDtCadastro(new DateTime($data['dtCadastro']));
+    }
+
+
+    /*
+    * insert ao banco
+    */
+    public function insert(){
+
+        $sql = new Sql(); // conexao com banco
+
+        $result = $sql->select("CALL sp_usuario_insert(:LOGIN, :PASSWORD)", array(
+            ":LOGIN" => $this->getLogin(),
+            ":PASSWORD" => $this->getSenha()
+        ));
+
+        if(count($result) > 0) {
+            $this->setData($result[0]);
+        }
+    }
+
+    /*
+    * insert com construtor
+    */ 
+    public function __construct($login = "", $password = ""){
+
+        $this->setLogin($login);
+		$this->setSenha($password);
+
+	}
+
     public function __toString(){
         
         return json_encode(array(
