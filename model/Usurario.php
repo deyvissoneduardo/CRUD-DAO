@@ -207,6 +207,25 @@ class Usuario{
         ));
     }
 
+    /* 
+    * method de exclusao
+    */
+    public function delete(){
+
+        $sql = new Sql(); // conexao com banco
+
+        // apago do banco
+        $sql->query("DELETE FROM usuario WHERE id = :ID", array(
+            ":ID" => $this->getId()
+        ));
+
+        // apaga da memoria do objeto
+        $this->setId(0);
+		$this->setLogin("");
+		$this->setSenha("");
+		$this->setDtcadastro(new DateTime());
+    }
+
     public function __toString(){
         
         return json_encode(array(

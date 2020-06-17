@@ -37,4 +37,9 @@ echo '-----------------------------------';
 $user->loadById(3);
 $user->update("atualizado", "852");
 echo $user;
-
+// deleta Usuario
+echo '-----------------------------------';
+echo '-----------------------------------';
+$user->loadById(1);
+$user->delete();
+echo $user;
