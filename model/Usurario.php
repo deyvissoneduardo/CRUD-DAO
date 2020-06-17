@@ -188,7 +188,24 @@ class Usuario{
         $this->setLogin($login);
 		$this->setSenha($password);
 
-	}
+    }
+    
+    /* 
+    * update 
+    */
+    public function update($login, $passoword){
+        // campos que pode atulizar
+        $this->setLogin($login);
+        $this->setSenha($passoword);
+
+        $sql = new Sql(); // conexao com banco
+
+        $sql->query("UPDATE usuario SET login = :LOGIN, senha = :PASSWORD WHERE id = :ID", array(
+            ":LOGIN" => $this->getLogin(),
+            ":PASSWORD" => $this->getSenha(),
+            ":ID" => $this->getId()
+        ));
+    }
 
     public function __toString(){
         
